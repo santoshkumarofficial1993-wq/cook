@@ -1,0 +1,504 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <title>FlavorCanvas | Artisanal Recipe Hub</title>
+    <!-- Google Fonts + Font Awesome 6 (Free) -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,300;14..32,400;14..32,500;14..32,600;14..32,700&family=Playfair+Display:ital,wght@0,500;0,600;1,500&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #fefaf5;
+            color: #2c2418;
+            scroll-behavior: smooth;
+        }
+
+        /* unique gradient texture background */
+        body::before {
+            content: "";
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image: radial-gradient(circle at 10% 20%, rgba(255, 226, 183, 0.25) 0%, rgba(255, 245, 230, 0) 70%);
+            pointer-events: none;
+            z-index: -2;
+        }
+
+        /* header / navbar */
+        .header {
+            background: rgba(255, 248, 240, 0.96);
+            backdrop-filter: blur(2px);
+            box-shadow: 0 8px 20px rgba(0,0,0,0.02), 0 2px 4px rgba(0,0,0,0.02);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            border-bottom: 1px solid #f0e2d0;
+        }
+
+        .nav-container {
+            max-width: 1300px;
+            margin: 0 auto;
+            padding: 1rem 2rem;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            flex-wrap: wrap;
+            gap: 1rem;
+        }
+
+        .logo h1 {
+            font-family: 'Playfair Display', serif;
+            font-size: 1.9rem;
+            font-weight: 600;
+            background: linear-gradient(135deg, #c25b2e, #e28c4a);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            letter-spacing: -0.5px;
+        }
+        .logo span {
+            font-size: 0.8rem;
+            font-weight: 400;
+            color: #b97f4b;
+            letter-spacing: 1px;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 2rem;
+            font-weight: 500;
+        }
+        .nav-links a {
+            text-decoration: none;
+            color: #4f3a2c;
+            transition: 0.2s;
+            font-size: 1rem;
+        }
+        .nav-links a:hover {
+            color: #c0682c;
+            transform: translateY(-2px);
+        }
+
+        /* hero section with unique offset shape */
+        .hero {
+            background: linear-gradient(112deg, #ffe6d5 0%, #fff3e8 100%);
+            margin: 2rem 2rem 2rem 2rem;
+            border-radius: 3rem;
+            padding: 3.5rem 2rem;
+            position: relative;
+            overflow: hidden;
+            box-shadow: 0 20px 35px -12px rgba(0,0,0,0.08);
+        }
+        .hero:before {
+            content: "✦";
+            font-size: 18rem;
+            position: absolute;
+            bottom: -60px;
+            right: -30px;
+            opacity: 0.08;
+            font-family: monospace;
+            pointer-events: none;
+        }
+        .hero-content {
+            max-width: 700px;
+            margin: 0 auto;
+            text-align: center;
+            position: relative;
+            z-index: 2;
+        }
+        .hero h2 {
+            font-family: 'Playfair Display', serif;
+            font-size: 3.2rem;
+            font-weight: 600;
+            color: #3e2a1f;
+        }
+        .hero p {
+            font-size: 1.2rem;
+            margin: 1rem 0 1.8rem;
+            color: #5a4332;
+        }
+        .hero-btn {
+            background: #c0682c;
+            border: none;
+            padding: 0.9rem 2.2rem;
+            border-radius: 60px;
+            font-weight: 600;
+            color: white;
+            font-size: 1rem;
+            transition: all 0.2s ease;
+            box-shadow: 0 10px 15px -7px rgba(192,104,44,0.3);
+            cursor: pointer;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+        }
+        .hero-btn:hover {
+            background: #a5531f;
+            transform: scale(0.98);
+            box-shadow: 0 5px 12px rgba(0,0,0,0.1);
+        }
+
+        /* main recipe grid section */
+        .recipes-section {
+            max-width: 1300px;
+            margin: 3rem auto;
+            padding: 0 2rem 3rem;
+        }
+
+        .section-header {
+            text-align: center;
+            margin-bottom: 3rem;
+        }
+        .section-header h3 {
+            font-family: 'Playfair Display', serif;
+            font-size: 2.2rem;
+            color: #2e241d;
+            position: relative;
+            display: inline-block;
+        }
+        .section-header h3:after {
+            content: "";
+            position: absolute;
+            bottom: -12px;
+            left: 25%;
+            width: 50%;
+            height: 3px;
+            background: #e28c4a;
+            border-radius: 3px;
+        }
+        .section-header p {
+            margin-top: 1.2rem;
+            color: #7a604b;
+            font-size: 1rem;
+        }
+
+        /* unique masonry-inspired grid with organic gaps */
+        .recipe-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 2rem;
+            align-items: stretch;
+        }
+
+        /* card design with modern flair */
+        .recipe-card {
+            background: white;
+            border-radius: 2rem;
+            overflow: hidden;
+            transition: all 0.35s cubic-bezier(0.2, 0, 0, 1);
+            box-shadow: 0 12px 26px -10px rgba(0,0,0,0.05);
+            display: flex;
+            flex-direction: column;
+            border: 1px solid #f3e6db;
+            backdrop-filter: blur(2px);
+        }
+        .recipe-card:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 22px 32px -12px rgba(0,0,0,0.12);
+            border-color: #ffd7b5;
+        }
+
+        .card-img {
+            width: 100%;
+            height: 200px;
+            object-fit: cover;
+            transition: transform 0.4s ease;
+            display: block;
+        }
+        .recipe-card:hover .card-img {
+            transform: scale(1.02);
+        }
+
+        .card-content {
+            padding: 1.5rem 1.3rem 1.6rem;
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .recipe-title {
+            font-size: 1.45rem;
+            font-weight: 700;
+            font-family: 'Playfair Display', serif;
+            color: #2d241c;
+            margin-bottom: 0.6rem;
+            line-height: 1.3;
+        }
+
+        .recipe-desc {
+            font-size: 0.9rem;
+            line-height: 1.45;
+            color: #6b4f3a;
+            margin: 0.5rem 0 1rem;
+            flex-grow: 1;
+        }
+
+        .meta-info {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin: 0.7rem 0 0.5rem;
+            font-size: 0.85rem;
+            border-top: 1px solid #f7ede3;
+            padding-top: 0.9rem;
+        }
+        .cook-time {
+            background: #fff2e8;
+            padding: 0.25rem 0.7rem;
+            border-radius: 40px;
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            color: #bc6f34;
+            font-weight: 500;
+        }
+        .rating {
+            color: #f5b342;
+            letter-spacing: 2px;
+            font-size: 0.85rem;
+        }
+        .rating-value {
+            color: #aa7a52;
+            margin-left: 4px;
+            font-weight: 500;
+        }
+
+        .btn-recipe {
+            background: none;
+            border: 1.5px solid #e6cfbb;
+            padding: 0.6rem 1rem;
+            border-radius: 3rem;
+            font-weight: 600;
+            font-size: 0.85rem;
+            margin-top: 1rem;
+            transition: 0.2s;
+            cursor: pointer;
+            background-color: #fffaf5;
+            color: #b6652e;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            width: 100%;
+        }
+        .btn-recipe i {
+            font-size: 0.8rem;
+        }
+        .btn-recipe:hover {
+            background: #c0682c;
+            border-color: #c0682c;
+            color: white;
+        }
+
+        /* footer */
+        .footer {
+            background: #f7ede3;
+            margin-top: 4rem;
+            padding: 2rem;
+            text-align: center;
+            border-radius: 2rem 2rem 0 0;
+            color: #5e4330;
+            font-size: 0.85rem;
+        }
+        .footer .socials {
+            margin-bottom: 1rem;
+            font-size: 1.3rem;
+            gap: 1.2rem;
+            display: flex;
+            justify-content: center;
+        }
+        .footer .socials i {
+            margin: 0 0.6rem;
+            transition: 0.2s;
+            cursor: pointer;
+            color: #ad6e3e;
+        }
+        .footer .socials i:hover {
+            color: #c25b2e;
+            transform: scale(1.05);
+        }
+
+        @media (max-width: 780px) {
+            .nav-container {
+                flex-direction: column;
+                text-align: center;
+            }
+            .hero h2 {
+                font-size: 2.2rem;
+            }
+            .hero {
+                margin: 1rem;
+                border-radius: 2rem;
+                padding: 2rem 1rem;
+            }
+            .recipes-section {
+                padding: 0 1rem 2rem;
+            }
+            .recipe-grid {
+                gap: 1.5rem;
+            }
+        }
+    </style>
+</head>
+<body>
+
+<header class="header">
+    <div class="nav-container">
+        <div class="logo">
+            <h1>Kitch<span style="color:#c0682c;">'n</span> Canvas</h1>
+            <span>artisanal gastronomy</span>
+        </div>
+        <div class="nav-links">
+            <a href="#">HOME</a>
+            <a href="#">RECIPES</a>
+            <a href="#">COOKBOOK</a>
+            <a href="#">STORIES</a>
+            <a href="#">CONTACT</a>
+        </div>
+    </div>
+</header>
+
+<div class="hero">
+    <div class="hero-content">
+        <h2>Savour the artistry of flavour</h2>
+        <p>From rustic hearths to modern kitchens — discover 18 handpicked culinary stories, crafted with love and season’s best ingredients.</p>
+        <button class="hero-btn" id="exploreBtn">Explore Collection <i class="fas fa-arrow-right"></i></button>
+    </div>
+</div>
+
+<main>
+    <section class="recipes-section">
+        <div class="section-header">
+            <h3>✦ Seasonal Canvas ✦</h3>
+            <p>fresh picks | chef’s tested | everyday magic</p>
+        </div>
+        <div id="recipeGridContainer" class="recipe-grid">
+            <!-- dynamic cards injected via JS (15-18 posts) -->
+            <div class="loading-spinner" style="text-align:center; grid-column:1/-1; padding: 3rem;">Loading flavourful recipes...</div>
+        </div>
+    </section>
+</main>
+
+<footer class="footer">
+    <div class="socials">
+        <i class="fab fa-instagram"></i>
+        <i class="fab fa-pinterest"></i>
+        <i class="fab fa-youtube"></i>
+        <i class="fab fa-tiktok"></i>
+    </div>
+    <p>© 2025 Kitchen Canvas — where every meal tells a story. All images inspired by real kitchens.</p>
+    <p style="margin-top:0.7rem; font-size:0.7rem;">🍽️ "Cook with intuition, taste with wonder"</p>
+</footer>
+
+<script>
+    // Exactly 18 delicious recipe objects (15-18 range, we provide 18 for rich layout)
+    const recipesData = [
+        { id: 1, title: "Ember-Roasted Tomato & Garlic Pasta", desc: "Slow-roasted heirlooms, wild oregano, and silky olive oil.", time: "35 min", rating: 5, image: "https://images.unsplash.com/photo-1473093295043-cdd812d0e601?w=300&h=200&fit=crop" },
+        { id: 2, title: "Smoky Chipotle Chicken Tacos", desc: "Tangy slaw, avocado crema, and charred tortillas.", time: "25 min", rating: 5, image: "https://images.unsplash.com/photo-1599974579688-8dbdd335c77f?w=300&h=200&fit=crop" },
+        { id: 3, title: "Herb-Crusted Salmon", desc: "Lemon dill butter, crisp skin, with roasted asparagus.", time: "30 min", rating: 4, image: "https://images.unsplash.com/photo-1519708227418-c8fd9a32b7a2?w=300&h=200&fit=crop" },
+        { id: 4, title: "Miso Sesame Buddha Bowl", desc: "Tofu, edamame, pickled radish, and ginger-tahini.", time: "20 min", rating: 5, image: "https://images.unsplash.com/photo-1512621776951-a57141f2eefd?w=300&h=200&fit=crop" },
+        { id: 5, title: "Double Cheesy Smash Burger", desc: "Caramelized onions, special sauce, potato bun.", time: "30 min", rating: 5, image: "https://images.unsplash.com/photo-1571091718767-18b5b1457add?w=300&h=200&fit=crop" },
+        { id: 6, title: "Wild Mushroom Risotto", desc: "Parmesan, truffle oil, and fresh thyme.", time: "45 min", rating: 4, image: "https://images.unsplash.com/photo-1476124369491-e7addf5db371?w=300&h=200&fit=crop" },
+        { id: 7, title: "Molten Dark Chocolate Lava Cake", desc: "Gooey center, raspberry coulis, vanilla bean ice cream.", time: "25 min", rating: 5, image: "https://images.unsplash.com/photo-1606313564200-e75d5e30476c?w=300&h=200&fit=crop" },
+        { id: 8, title: "Caramelized French Onion Soup", desc: "Gruyère crouton, rich bone broth, sherry finish.", time: "55 min", rating: 4, image: "https://images.unsplash.com/photo-1547592166-23ac45744acd?w=300&h=200&fit=crop" },
+        { id: 9, title: "Butter Chicken Tikka Masala", desc: "Creamy spiced tomato gravy, fresh cilantro, garlic naan.", time: "50 min", rating: 5, image: "https://images.unsplash.com/photo-1565557623262-b51c2513a641?w=300&h=200&fit=crop" },
+        { id: 10, title: "Margherita Pizza with Basil", desc: "San Marzano tomatoes, fior di latte, extra virgin oil.", time: "40 min", rating: 5, image: "https://images.unsplash.com/photo-1604382354936-07c5d9983bd3?w=300&h=200&fit=crop" },
+        { id: 11, title: "Artisanal Sushi Roll Set", desc: "Fresh salmon, avocado, cucumber, wasabi soy.", time: "60 min", rating: 4, image: "https://images.unsplash.com/photo-1579871494447-9811cf80d66c?w=300&h=200&fit=crop" },
+        { id: 12, title: "Fluffy Brioche French Toast", desc: "Cinnamon custard, berry compote, maple syrup.", time: "20 min", rating: 5, image: "https://images.unsplash.com/photo-1528207776546-365bb710ee93?w=300&h=200&fit=crop" },
+        { id: 13, title: "Ginger Soy Stir Fry Noodles", desc: "Crispy tofu, bok choy, sesame seeds.", time: "20 min", rating: 4, image: "https://images.unsplash.com/photo-1512058564366-18510be2db19?w=300&h=200&fit=crop" },
+        { id: 14, title: "Coconut Green Curry", desc: "Thai eggplant, bamboo shoots, kaffir lime leaves.", time: "35 min", rating: 5, image: "https://images.unsplash.com/photo-1455619452474-d2be8b1e70cd?w=300&h=200&fit=crop" },
+        { id: 15, title: "Brown Butter Blondies", desc: "Sea salt, white chocolate, pecans.", time: "28 min", rating: 4, image: "https://images.unsplash.com/photo-1606312619070-d48b4c652a52?w=300&h=200&fit=crop" },
+        { id: 16, title: "Mediterranean Farro Salad", desc: "Cucumber, feta, kalamata olives, lemon herb vinaigrette.", time: "15 min", rating: 5, image: "https://images.unsplash.com/photo-1540420773420-3366772f4999?w=300&h=200&fit=crop" },
+        { id: 17, title: "Swedish Meatballs with Lingonberry", desc: "Cream gravy, buttered parsley potatoes.", time: "45 min", rating: 4, image: "https://images.unsplash.com/photo-1598515214211-89d3c73ae83b?w=300&h=200&fit=crop" },
+        { id: 18, title: "Provençal Vegetable Omelette", desc: "Zucchini, bell peppers, goat cheese, fines herbes.", time: "18 min", rating: 5, image: "https://images.unsplash.com/photo-1510693206972-df098062cb71?w=300&h=200&fit=crop" }
+    ];
+
+    // Helper function to generate star rating string based on value (1-5)
+    function getStarRating(ratingVal) {
+        let fullStars = Math.floor(ratingVal);
+        let starString = '';
+        for (let i = 0; i < fullStars; i++) starString += '★';
+        if (ratingVal % 1 >= 0.5) starString += '½';
+        let emptyStars = 5 - Math.ceil(ratingVal);
+        for (let i = 0; i < emptyStars; i++) starString += '☆';
+        return starString;
+    }
+
+    // Build cards and inject into DOM
+    function buildRecipeGrid() {
+        const container = document.getElementById('recipeGridContainer');
+        if (!container) return;
+        
+        let cardsHtml = '';
+        recipesData.forEach(recipe => {
+            const starDisplay = getStarRating(recipe.rating);
+            const numericRating = recipe.rating.toFixed(1);
+            
+            cardsHtml += `
+                <div class="recipe-card" data-id="${recipe.id}">
+                    <img class="card-img" src="${recipe.image}" alt="${recipe.title} dish" loading="lazy" onerror="this.src='https://picsum.photos/id/300/300/200?grayscale'">
+                    <div class="card-content">
+                        <h4 class="recipe-title">${recipe.title}</h4>
+                        <p class="recipe-desc">${recipe.desc}</p>
+                        <div class="meta-info">
+                            <span class="cook-time"><i class="far fa-clock"></i> ${recipe.time}</span>
+                            <span class="rating">
+                                <span class="stars" style="color:#f5b342;">${starDisplay}</span>
+                                <span class="rating-value">${numericRating}</span>
+                            </span>
+                        </div>
+                        <button class="btn-recipe recipe-btn-trigger" data-name="${recipe.title}"><i class="fas fa-utensils"></i> view recipe →</button>
+                    </div>
+                </div>
+            `;
+        });
+        
+        container.innerHTML = cardsHtml;
+        
+        // Attach event listeners to all recipe buttons (simple alert demo)
+        const allButtons = document.querySelectorAll('.recipe-btn-trigger');
+        allButtons.forEach(btn => {
+            btn.addEventListener('click', (e) => {
+                e.stopPropagation();
+                const recipeTitle = btn.getAttribute('data-name');
+                alert(`✨ "${recipeTitle}" full recipe & instructions are coming soon!\nCheck back for chef notes and video tutorial.`);
+            });
+        });
+    }
+
+    // Hero explore button smooth scroll to recipes
+    function initInteractions() {
+        const exploreBtn = document.getElementById('exploreBtn');
+        if (exploreBtn) {
+            exploreBtn.addEventListener('click', () => {
+                const recipeSection = document.querySelector('.recipes-section');
+                if (recipeSection) {
+                    recipeSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                }
+            });
+        }
+        
+        // optional nav link scroll simulator (just for aesthetics)
+        const navHome = document.querySelector('.nav-links a[href="#"]');
+        if (navHome) navHome.addEventListener('click', (e) => { e.preventDefault(); window.scrollTo({ top: 0, behavior: 'smooth' }); });
+    }
+    
+    // initialize after DOM ready
+    document.addEventListener('DOMContentLoaded', () => {
+        buildRecipeGrid();   // injects 18 beautiful recipe posts
+        initInteractions();
+    });
+</script>
+
+</body>
+</html>
